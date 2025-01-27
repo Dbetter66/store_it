@@ -16,14 +16,17 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import Link from "next/link";
 import { createAccount } from "@/lib/actions/user.actions";
+import OtpModal from "@/components/OTPModal";
 
 type FormType = "sign-in" | "sign-up";
 
 const authFormSchema = (formType: FormType) => {
   return z.object({
-    email: z.string().email,
+    email: z.string().email(),
     fullName:
-      formType === "sign-up" ? z.string().min(2).max(50) : z.string().optional,
+      formType === "sign-up"
+        ? z.string().min(2).max(50)
+        : z.string().optional(),
   });
 };
 
@@ -91,7 +94,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
           <FormField
             control={form.control}
-            name="Email"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <div className="shad-form-item">
@@ -143,6 +146,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </div>
         </form>
       </Form>
+
+      {true && (
+        <OtpModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
